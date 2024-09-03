@@ -1,6 +1,7 @@
-import Card from '@/app/lib/Card'
+import CardLogic from '@/app/lib/Card'
 
-// const {Card} = CardClass
+const {Card} = CardLogic
+
 describe('Card', () => {
 
     it('should create a card with suit and rank', () => {
