@@ -3,7 +3,7 @@
 # Game Model 
 
 1. Create a single deck of playing cards
-2. two players (called Player and the Dealer) who will play against each other
+2. Two players (called Player and the Dealer) who will play against each other
 3. Each player is given three cards from the top of a shuffled deck of cards
 
 # Rules :
