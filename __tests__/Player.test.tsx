@@ -1,16 +1,12 @@
 import Player from "@/app/lib/Player";
-import Deck from "@/app/lib/Deck";
 import { Card } from "@/app/lib/Card";
-import { init } from "next/dist/compiled/webpack/webpack";
 
 describe('Player', () => {
 
     let player: Player;
-    let deck: Deck;
 
     beforeEach(() => {
         player = new Player('John');
-        deck = new Deck();
     })
 
     it('should initialize Player with name and empty hand', () => {
@@ -27,7 +23,7 @@ describe('Player', () => {
         expect(receivedCards).toEqual(drawnTwoCards); 
         expect(receivedCards.length).toBe(2);
 
-        })
+    })
 
     it('should add one card to hand after receiving two cards', () => {
 
