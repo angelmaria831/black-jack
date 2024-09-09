@@ -20,7 +20,7 @@ class  Deck {
         }
 
         return this.cards;
-    }
+    }  
 
     draw(count : number){
 

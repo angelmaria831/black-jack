@@ -1,19 +1,24 @@
+const suits: Set<string> = new Set(["Hearts", "Diamonds", "Clubs", "Spades"]);
+const ranks: Set<string> = new Set(['A','2','3','4','5','6','7','8','9','10','J','Q','K']);
+
 class Card{
-    suit : string;
-    rank : string;
+    readonly suit : string;
+    readonly rank : string;
 
     constructor(suit : string, rank : string){
-        this.suit = suit
-        this.rank = rank
+        if(!suits.has(suit) || !ranks.has(rank))
+            throw new Error("Invalid suit or rank");
+        this.suit = suit;
+        this.rank = rank;
     }
 }
 
-const suits = ["Hearts", "Diamonds", "Clubs", "Spades"]
-const ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']
+const suitsArray: string[] = Array.from(suits);
+const ranksArray: string[] = Array.from(ranks);
 
 export {
     Card,
-    suits,
-    ranks}
+    suitsArray as suits,
+    ranksArray as ranks };
 
 export type CardType = Card;
