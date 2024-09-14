@@ -1,12 +1,14 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 
-export default function Home() {
+export default function HomePage() {
 
+    const router = useRouter();
     const scrollToDiv = (divId: string) =>{
         const section = document.getElementById(divId);
-        section?.scrollIntoView({behavior: 'smooth'})
+        section?.scrollIntoView({behavior: 'smooth'});
     }
     
     return (
@@ -32,7 +34,8 @@ export default function Home() {
 
                 <div className="relative z-10 flex flex-col items-center justify-center h-full">
                     <h1 className="text-white text-5xl font-bold ">Beat the <span className="text-red-700">Dealer</span>, Not the Odds. Are You In?</h1>
-                    <button className="mt-5 px-4 py-2 bg-red-800 text-white rounded hover:bg-red-500 transition duration-300">Play Now!</button>
+                    <button className="mt-5 px-4 py-2 bg-red-800 text-white rounded hover:bg-red-500 transition duration-300"
+                    onClick={() => router.push('/game')}>Play Now!</button>
                 </div>
             </main>
 
