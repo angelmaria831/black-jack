@@ -22,7 +22,7 @@ export default function GamePage() {
 
                 <div className="relative flex flex-col items-center justify-center h-full">
 
-                    <div className="relative w-full flex justify-center items-center mb-8">
+                    <div className="relative w-full flex justify-center items-center mb-8 ">
                     <h1 className="text-red-900 text-4xl left-0 font-bold mb-4">Dealer</h1>
                     <Image 
                         alt="cards-shuffled"
@@ -33,13 +33,13 @@ export default function GamePage() {
 
 
                     </div>
-                    <div className="flex gap-6 mb-8">
+                    <div className="flex gap-6 mb-8 ">
                         <Image 
                         alt="card-one"
                         src="/cards/card-back2.png" 
                         width={80}
                         height={120} 
-                        className="object-contain"  />
+                        className="object-contain border-4 border-grey rounded-md"  />
                         <Image 
                         alt="card-two"
                         src="/cards/clubs_3.png"
@@ -64,7 +64,17 @@ export default function GamePage() {
                         className="object-contain"  />
 
                     </div>
+
+                    <div className="relative w-full flex justify-center items-center mb-8">
+                    <button type="button"  className="inset-y-0 p-2 mr-8 bg-red-900 text-white rounded"> Start</button>
+                <button type="button"  className="inset-y-0 p-2 mr-8 bg-red-900 text-white rounded"> Hit</button>
+                <button type="button"  className="inset-y-0 p-2 mr-8 bg-red-900 text-white rounded"> Stand</button>
+                    </div>
+
                 </div>
+
+
+
             </main>
             
             <section
