@@ -20,10 +20,10 @@ export default function GamePage() {
                 fill
                 style={{objectFit:"contain"}} />
 
-                <div className="relative flex flex-col items-center justify-center h-full">
+                <div className="relative flex flex-col items-center justify-center h-full mt-7">
 
-                    <div className="relative w-full flex justify-center items-center mb-8 ">
-                    <h1 className="text-red-900 text-4xl left-0 font-bold mb-4">Dealer</h1>
+                    <div className="relative w-full flex justify-center items-center mb-8 mt-14">
+                    <h1 className="text-red-900 text-4xl left-0 font-bold mb-4 ">Dealer</h1>
                     <Image 
                         alt="cards-shuffled"
                         src="/cards/card-back2.png" 
@@ -33,8 +33,8 @@ export default function GamePage() {
 
 
                     </div>
-                    <div className="flex gap-6 mb-8 ">
-                        <Image 
+                    <div className="flex gap-6 mb-4">
+                        {/* <Image 
                         alt="card-one"
                         src="/cards/card-back2.png" 
                         width={80}
@@ -45,30 +45,33 @@ export default function GamePage() {
                         src="/cards/clubs_3.png"
                         width={80}
                         height={120}
-                        className="object-contain"  />
+                        className="object-contain border-4 border-grey rounded-md"  /> */}
+                        <div id="card-border" className="w-[80px] h-[120px] border-4 border-grey rounded-md" ></div>
+                        <div id="card-border" className="w-[80px] h-[120px] border-4 border-grey rounded-md" ></div>
 
                     </div>
-                    <h1 className="text-white text-4xl font-bold mb-8">You</h1>
-                    <div className="flex gap-6 mb-8">
-                        <Image 
+                    <h1 className="text-white text-4xl font-bold mb-4 mt-4">You</h1>
+                    <div className="flex gap-6 mb-6">
+                        {/* <Image 
                         alt="card-one"
                         src="/cards/clubs_2.png"
                         width={80}
                         height={120}
-                        className="object-contain"  />
+                        className="object-contain border-4 border-grey rounded-md"  />
                         <Image 
                         alt="card-two"
                         src="/cards/clubs_3.png"
                         width={80}
                         height={120}
-                        className="object-contain"  />
-
+                        className="object-contain border-4 border-grey rounded-md"  /> */}
+                              <div  id="card-border" className="w-[80px] h-[120px] border-4 border-grey rounded-md" ></div>
+                              <div  id="card-border" className="w-[80px] h-[120px] border-4 border-grey rounded-md" ></div>
                     </div>
 
-                    <div className="relative w-full flex justify-center items-center mb-8">
-                    <button type="button"  className="inset-y-0 p-2 mr-8 bg-red-900 text-white rounded"> Start</button>
-                <button type="button"  className="inset-y-0 p-2 mr-8 bg-red-900 text-white rounded"> Hit</button>
-                <button type="button"  className="inset-y-0 p-2 mr-8 bg-red-900 text-white rounded"> Stand</button>
+                    <div className="relative w-full flex justify-center mb-8">
+                    <button type="button"  className="inset-y-0 px-5 py-3 m-8 bg-red-900 text-white rounded"> Start</button>
+                <button type="button"  className="inset-y-0 px-6 py-3 m-8 bg-red-900 text-white rounded"> Hit</button>
+                <button type="button"  className="inset-y-0 px-5 py-3 m-8 bg-red-900 text-white rounded"> Stand</button>
                     </div>
 
                 </div>
