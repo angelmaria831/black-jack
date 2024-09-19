@@ -8,8 +8,8 @@ class Game {
     deck: DeckType | null;
 
     constructor(playerName: string) {
-        this.player = new Player(playerName);
-        this.dealer = new Player("Dealer");
+        this.player = new Player(playerName.toLowerCase());
+        this.dealer = new Player("dealer");
         this.deck = null;
     }
 
@@ -25,11 +25,14 @@ class Game {
     }
 
     showCards(name: string) {
+
+        name = name.toLowerCase();
   
-        if(name.toLowerCase() === 'dealer')
-            return this.dealer.hand
-        else 
+        if(name === 'dealer')
+            return this.dealer.hand;
+        else if(name === this.player.name)
             return this.player.hand;
+        else throw new Error("Invalid player name");
     } 
 }
 
