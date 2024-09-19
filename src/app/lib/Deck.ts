@@ -3,7 +3,7 @@ import { CardType, Card, suits, ranks } from './Card';
 
 class  Deck {
 
-    cards : CardType[]
+    cards: CardType[]
 
     constructor(){
         this.cards = suits.flatMap(suit => ranks.map(rank => new Card(suit, rank)));
@@ -22,12 +22,15 @@ class  Deck {
         return this.cards;
     }  
 
-    draw(count : number){
+    draw(count: number): CardType[] | any{
 
         if(count !== 1 && count !== 2) throw new Error("Invalid Count to Draw");
+
+        if(this.cards.length < count) throw new Error("No Card to draw");
 
         return Array.from({length : count}, () => this.cards.pop());
     }
 }
 
-export default Deck
+export default Deck;
+export type { Deck as DeckType};
