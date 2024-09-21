@@ -19,7 +19,7 @@ const ranksArray: string[] = Array.from(ranks);
 type CardType = Card;
 
 const getCardImagePath = (card: CardType): string =>{
-    return `/${card.suit.toLowerCase()}_${card.rank.toLowerCase()}.png`;
+    return `/cards/${card.suit.toLowerCase()}_${card.rank.toLowerCase()}.png`;
 }
 
 export {
