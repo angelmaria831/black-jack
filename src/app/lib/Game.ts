@@ -24,15 +24,12 @@ class Game {
 
     }
 
-    showCards(name: string) {
+    showCards() {
 
-        name = name.toLowerCase();
-  
-        if(name === 'dealer')
-            return this.dealer.hand;
-        else if(name === this.player.name)
-            return this.player.hand;
-        else throw new Error("Invalid player name");
+        return {
+            dealerCards: this.dealer.hand,
+            playerCards: this.player.hand
+        }
     } 
 }
 

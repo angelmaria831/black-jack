@@ -41,6 +41,9 @@ class Player {
 
     }
 
+
 }
 
+
 export default Player;
+export type {Player as PlayerType};

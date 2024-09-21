@@ -37,32 +37,14 @@ describe('Deck and Cards', () => {
 
     });
 
-    it('should show cards of Dealer', () => {
+    it('should show the cards of dealer and player', () => {
         game.startGame();
+        const cards = game.showCards();
 
-        const dealersHand = game.showCards('Dealer');
-        expect(dealersHand.length).toBe(2);
-        
-    });
-
-    it('should show cards of Player', () => {
-        game.startGame();
-
-        const playersHand = game.showCards('Sam');
-        expect(playersHand.length).toBe(2);
+        expect(cards.dealerCards.length).toBe(2);
+        expect(cards.playerCards.length).toBe(2);
     });
 });
 
-describe('Error Handling', () => {
-    it('should throw error when invalid palyer name is passed to showCards method', () => {
-        game.startGame();
 
-        expect(() => {
-            game.showCards('John');
-        }).toThrow('Invalid player name');
 
-        expect(() => {
-            game.showCards('deale');
-        }).toThrow('Invalid player name')
-    })
-})
