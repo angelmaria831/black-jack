@@ -1,5 +1,6 @@
 import Deck, { DeckType } from "./Deck";
 import Player, { PlayerType } from "./Player";
+import { getCardImagePath } from "./Card";
 
 class Game {
 
@@ -24,11 +25,11 @@ class Game {
 
     }
 
-    showCards() {
+    showCardsImage() {
 
         return {
-            dealerCards: this.dealer.hand,
-            playerCards: this.player.hand
+            dealerCards: this.dealer.hand.map(card => getCardImagePath(card)),
+            playerCards: this.player.hand.map(card => getCardImagePath(card))
         }
     } 
 }

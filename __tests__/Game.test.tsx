@@ -39,7 +39,7 @@ describe('Deck and Cards', () => {
 
     it('should show the cards of dealer and player', () => {
         game.startGame();
-        const cards = game.showCards();
+        const cards = game.showCardsImage();
 
         expect(cards.dealerCards.length).toBe(2);
         expect(cards.playerCards.length).toBe(2);
