@@ -1,13 +1,27 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-
+import Game from "../lib/Game";
 
 export default function GamePage() {
 
     const [isDealt, setIsDealt] = useState(false);
+    const game = new Game("Sam");
+    const [dealerHand, setDealerHand] = useState(['','']);
+    let [playerHand, setPlayerHand] = useState(['','']);
+
 
     const startGame = () => {
+        game.startGame();
+        const {dealerCards, playerCards} = game.showCardsImage();
+        console.log({dealerCards, playerCards})
+        setDealerHand(dealerCards);
+        setPlayerHand(playerCards);
+
+        /**
+         * dealerCards: ["/diamonds_4.png", "/spades_3.png"]
+         * playerCards: ["/diamonds_a.png", "/spades_a.png"]
+         */
         setIsDealt(true);
     }
 
@@ -37,51 +51,63 @@ export default function GamePage() {
                             src="/cards/card-back2.png"
                             width={80}
                             height={120}
-                            className="absolute right-0 mr-40 object-contain" />
+                            className="absolute cards-shuffled right-0 mr-40 object-contain" />
 
 
                     </div>
-                    <div className="flex gap-6 mb-4">
+                    <div id="dealer-cards" className="relative flex justify-center items-center mb-4 border-4 border-grey rounded-md"
+                    style={{ height: '140px', width: '200px' }}>
  
-                        <div id="card-border" className="w-[90px] h-[120px] border-4 border-grey rounded-md" >
-                            {isDealt && (
+                        
+                            {isDealt ? 
+                            dealerHand.map((cardImage, index) =>
+                                <div key={index} id="card-border" className="w-[90px] h-[120px] absolute"    style={{
+                                    top: `${index * 0}px`,
+                                    left: `${index * 25}px`
+                                }}>
                                 <Image
-                                    alt="card-one"
-                                    src="/cards/card-back2.png"
+                                    alt={`dealer-card-${index}`}
+                                    src={cardImage}
                                     width={80}
                                     height={120}
-                                    className="object-cover" />
+                                    className="object-contain cards animate-card-deal animate-slide-to-position"
+                                   />
+                                </div>
+                            ) :
+                            (
+                                dealerHand.map((_, index) => 
+                                    <div key={index} id="card-border" className="w-[90px] h-[120px] " />
+                                )                          
                             )
                             }
-                        </div>
-                        <div id="card-border" className="w-[90px] h-[120px] border-4 border-grey rounded-md" >{
-                            isDealt && (<Image
-                                alt="card-two"
-                                src="/cards/clubs_3.png"
-                                width={80}
-                                height={120}
-                                className="object-cover" />)}</div>
 
                     </div>
                     <h1 className="text-white text-4xl font-bold mb-4 mt-4">You</h1>
-                    <div className="flex gap-6 mb-6">
+                    <div id="player-cards" className="relative flex items-center justify-center mb-6 border-4 border-grey rounded-md">
+                        
+                            {isDealt ? 
+                            playerHand.map((cardImage, index) => 
+                                <div key={index} id="card-border" className="w-[90px] h-[120px] " >
+                                <Image
+                                alt={`player-card-${index}`}
+                                src={cardImage}
+                                width={80}
+                                height={120}
+                                className="object-contain cards animate-card-deal animate-slide-to-position"
+                                style={{
+                                    top: `${index * -15}px`,
+                                    left: `${index * 5}px`
+                                }} />
+                        </div>
+                            ) : 
+                            (
+                                playerHand.map((_, index) => 
+                                    <div key={index} id="card-border" className="w-[90px] h-[120px]" />
+                                )
+                            )
+                            
+                         }
 
-                        <div id="card-border" className="w-[90px] h-[120px] border-4 border-grey rounded-md" >
-                            {isDealt && (<Image
-                                alt="card-one"
-                                src="/cards/clubs_2.png"
-                                width={80}
-                                height={120}
-                                className="object-cover" />)}
-                        </div>
-                        <div id="card-border" className="w-[90px] h-[120px] border-4 border-grey rounded-md" >
-                            {isDealt && (<Image
-                                alt="card-two"
-                                src="/cards/clubs_3.png"
-                                width={80}
-                                height={120}
-                                className="object-contain border-4 border-grey rounded-md" />)}
-                        </div>
                     </div>
 
                     <div className="relative w-full flex justify-center mb-8">
