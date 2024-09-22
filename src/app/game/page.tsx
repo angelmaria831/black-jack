@@ -40,12 +40,12 @@ export default function GamePage() {
                 <Image src="/table_background.png"
                     alt="Table Image"
                     fill
-                    style={{ objectFit: "contain" }} />
+                    style={{ objectFit: "cover" }} />
 
                 <div className="relative flex flex-col items-center justify-center h-full mt-7">
 
-                    <div className="relative w-full flex justify-center items-center mb-8 mt-14">
-                        <h1 className="text-red-900 text-4xl left-0 font-bold mb-4 ">Dealer</h1>
+                    <div className="relative w-full flex justify-center items-center mt-14">
+                        <h1 className="text-red-900 text-4xl left-0 font-bold mb-6 ">Dealer</h1>
                         <Image
                             alt="cards-shuffled"
                             src="/cards/card-back2.png"
@@ -61,48 +61,50 @@ export default function GamePage() {
                         
                             {isDealt ? 
                             dealerHand.map((cardImage, index) =>
-                                <div key={index} id="card-border" className="w-[90px] h-[120px] absolute"    style={{
+                                <div key={index} id="card-border" className="absolute w-[90px] h-[113px]"    style={{
                                     top: `${index * 0}px`,
-                                    left: `${index * 25}px`
+                                    left: `${index * 30}px`
                                 }}>
                                 <Image
                                     alt={`dealer-card-${index}`}
                                     src={cardImage}
                                     width={80}
-                                    height={120}
-                                    className="object-contain cards animate-card-deal animate-slide-to-position"
+                                    height={113}
+                                    className="object-cover cards animate-card-deal animate-slide-to-position mt-2"
                                    />
                                 </div>
                             ) :
                             (
                                 dealerHand.map((_, index) => 
-                                    <div key={index} id="card-border" className="w-[90px] h-[120px] " />
+                                    <div key={index} id="card-border" className="absolute w-[90px] h-[113px] " />
                                 )                          
                             )
                             }
 
                     </div>
                     <h1 className="text-white text-4xl font-bold mb-4 mt-4">You</h1>
-                    <div id="player-cards" className="relative flex items-center justify-center mb-6 border-4 border-grey rounded-md">
+                    <div id="player-cards" className="relative flex justify-center items-center mb-6 border-4 border-grey rounded-md" 
+                    style={{ height: '140px', width: '200px' }}>
                         
                             {isDealt ? 
                             playerHand.map((cardImage, index) => 
-                                <div key={index} id="card-border" className="w-[90px] h-[120px] " >
+                                <div key={index} id="card-border" className="absolute w-[90px] h-[113px]" 
+                                 style={{
+                                    top: `${index * 0}px`,
+                                    left: `${index * 30}px`
+                                }}  >
                                 <Image
                                 alt={`player-card-${index}`}
                                 src={cardImage}
                                 width={80}
-                                height={120}
-                                className="object-contain cards animate-card-deal animate-slide-to-position"
-                                style={{
-                                    top: `${index * -15}px`,
-                                    left: `${index * 5}px`
-                                }} />
+                                height={113}
+                                className="object-cover cards animate-card-deal animate-slide-to-position mt-2"
+                               />
                         </div>
                             ) : 
                             (
                                 playerHand.map((_, index) => 
-                                    <div key={index} id="card-border" className="w-[90px] h-[120px]" />
+                                    <div key={index} id="card-border" className="absolute w-[90px] h-[120px]" />
                                 )
                             )
                             
