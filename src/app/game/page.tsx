@@ -3,26 +3,59 @@ import Image from "next/image";
 import { useState } from "react";
 import Game from "../lib/Game";
 
+type Card = {
+    card: string;
+    flipped: boolean;
+}
+
 export default function GamePage() {
 
     const [isDealt, setIsDealt] = useState(false);
+    const [dealerHand, setDealerHand] = useState<Card[]>([]);
+    const [playerHand, setPlayerHand] = useState(['','']);
+    const [dealerAnimate, setDealerAnimate] = useState(false);
+    const [playerAnimate, setPlayerAnimate] = useState(false);
+
     const game = new Game("Sam");
-    const [dealerHand, setDealerHand] = useState(['','']);
-    let [playerHand, setPlayerHand] = useState(['','']);
 
 
-    const startGame = () => {
+
+    const startGame = async() => {
         game.startGame();
-        const {dealerCards, playerCards} = game.showCardsImage();
+        const {dealerCards, playerCards} = await game.showCardsImage();
         console.log({dealerCards, playerCards})
-        setDealerHand(dealerCards);
+        flipDealerCards(dealerCards);
+        // setDealerHand(dealerCards);
         setPlayerHand(playerCards);
+
+        setDealerAnimate(true);
+        setTimeout(() => setPlayerAnimate(true), 1500);
 
         /**
          * dealerCards: ["/diamonds_4.png", "/spades_3.png"]
          * playerCards: ["/diamonds_a.png", "/spades_a.png"]
          */
         setIsDealt(true);
+    }
+
+    const flipDealerCards = (dealerCards: string[]) => {
+
+        dealerCards.forEach((card: string, index) => {
+            console.log({card})
+            setTimeout(() => {
+                setDealerHand((prevCards) => [
+                    ...prevCards, 
+                    {card, flipped: false},
+                ]);
+
+                setTimeout(() => {
+                    setDealerHand((prevCards) => 
+                    prevCards.map((c, i) => (i === index) ? {...c, flipped: true} : c))
+                }, 1000);
+            }, index * 2000);
+
+        });
+
     }
 
     return (
@@ -47,11 +80,22 @@ export default function GamePage() {
                     <div className="relative w-full flex justify-center items-center mt-14">
                         <h1 className="text-red-900 text-4xl left-0 font-bold mb-6 ">Dealer</h1>
                         <Image
-                            alt="cards-shuffled"
+                            alt="Shuffled Deck"
                             src="/cards/card-back2.png"
                             width={80}
                             height={120}
                             className="absolute cards-shuffled right-0 mr-40 object-contain" />
+                        {/* {isDealt && 
+                            dealerHand.map((cardImage, index) => 
+                                
+                                <Image
+                            alt="Shuffled Deck"
+                            src="/cards/card-back2.png"
+                            width={80}
+                            height={120}
+                            className="absolute card-animation cards-shuffled right-0 mr-40 object-contain" />
+                            )
+                        } */}
 
 
                     </div>
@@ -59,26 +103,34 @@ export default function GamePage() {
                     style={{ height: '140px', width: '200px' }}>
  
                         
-                            {isDealt ? 
-                            dealerHand.map((cardImage, index) =>
-                                <div key={index} id="card-border" className="absolute w-[90px] h-[113px]"    style={{
+                            {isDealt && 
+                            dealerHand.map((cardObj, index) =>
+                                <div key={index} id="card-border" className="absolute w-[90px] h-[113px]"   
+                                     style={{
                                     top: `${index * 0}px`,
                                     left: `${index * 30}px`
                                 }}>
-                                <Image
+                                {
+                                    cardObj.flipped ? (
+                                    <Image
                                     alt={`dealer-card-${index}`}
-                                    src={cardImage}
+                                    src={cardObj.card}
                                     width={80}
                                     height={113}
-                                    className="object-cover cards animate-card-deal animate-slide-to-position mt-2"
-                                   />
+                                    className="object-cover cards mt-2"
+                                   /> 
+                                    ): (
+                                        <Image
+                                        alt= "back-side-card"
+                                        src="/cards/card-back2.png"
+                                        width={80}
+                                        height={113}
+                                        className="object-cover dealer-animate cards mt-2"
+                                       /> 
+                                    )
+                                }
                                 </div>
-                            ) :
-                            (
-                                dealerHand.map((_, index) => 
-                                    <div key={index} id="card-border" className="absolute w-[90px] h-[113px] " />
-                                )                          
-                            )
+                            )                            
                             }
 
                     </div>
@@ -98,7 +150,7 @@ export default function GamePage() {
                                 src={cardImage}
                                 width={80}
                                 height={113}
-                                className="object-cover cards animate-card-deal animate-slide-to-position mt-2"
+                                className="object-cover cards mt-2"
                                />
                         </div>
                             ) : 
