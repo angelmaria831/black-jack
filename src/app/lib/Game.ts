@@ -1,17 +1,19 @@
 import Deck, { DeckType } from "./Deck";
 import Player, { PlayerType } from "./Player";
-import { getCardImagePath } from "./Card";
+import { getCardImagePath, cardBackImagePath } from "./Card";
 
 class Game {
 
     player: PlayerType;
     dealer: PlayerType;
     deck: DeckType | null;
+    isDealerCardHidden: Boolean;
 
     constructor(playerName: string) {
         this.player = new Player(playerName.toLowerCase());
         this.dealer = new Player("dealer");
         this.deck = null;
+        this.isDealerCardHidden = true;
     }
 
 
@@ -26,9 +28,8 @@ class Game {
     }
 
     showCardsImage() {
-
         return {
-            dealerCards: this.dealer.hand.map(card => getCardImagePath(card)),
+            dealerCards: this.dealer.hand.map((card, index) => (this.isDealerCardHidden && index === 0) ? cardBackImagePath : getCardImagePath(card)),
             playerCards: this.player.hand.map(card => getCardImagePath(card))
         }
     } 
