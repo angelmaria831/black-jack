@@ -72,6 +72,28 @@ border-radius: 5px;
   }
 }
 
+@keyframes card-flow-player {
+
+  0% {
+    transform: translate(450px,-350px);
+    opacity: 0.5;
+  }
+
+
+  50% {
+    opacity: 1;
+    transform: translate(0, 0);   
+  }
+
+  100%{
+    transform: translate(0, 0);
+    transform: rotateY(180deg);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    backface-visibility: hidden;
+  }
+}
+
 @keyframes flip-card {
 
   0% {
@@ -100,5 +122,5 @@ border-radius: 5px;
 }
 
 .player-animate {
-  animation: card-flow 2s ease forwards;
+  animation: card-flow-player 1.5s ease backwards;
 }

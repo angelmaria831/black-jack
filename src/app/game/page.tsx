@@ -12,7 +12,7 @@ export default function GamePage() {
 
     const [isDealt, setIsDealt] = useState(false);
     const [dealerHand, setDealerHand] = useState<Card[]>([]);
-    const [playerHand, setPlayerHand] = useState(['','']);
+    const [playerHand, setPlayerHand] = useState<Card[]>([]);
     const [dealerAnimate, setDealerAnimate] = useState(false);
     const [playerAnimate, setPlayerAnimate] = useState(false);
 
@@ -24,24 +24,16 @@ export default function GamePage() {
         game.startGame();
         const {dealerCards, playerCards} = await game.showCardsImage();
         console.log({dealerCards, playerCards})
+
         flipDealerCards(dealerCards);
-        // setDealerHand(dealerCards);
-        setPlayerHand(playerCards);
+        flipPlayerCards(playerCards);
 
-        setDealerAnimate(true);
-        setTimeout(() => setPlayerAnimate(true), 1500);
-
-        /**
-         * dealerCards: ["/diamonds_4.png", "/spades_3.png"]
-         * playerCards: ["/diamonds_a.png", "/spades_a.png"]
-         */
         setIsDealt(true);
     }
 
     const flipDealerCards = (dealerCards: string[]) => {
 
         dealerCards.forEach((card: string, index) => {
-            console.log({card})
             setTimeout(() => {
                 setDealerHand((prevCards) => [
                     ...prevCards, 
@@ -50,6 +42,25 @@ export default function GamePage() {
 
                 setTimeout(() => {
                     setDealerHand((prevCards) => 
+                    prevCards.map((c, i) => (i === index) ? {...c, flipped: true} : c))
+                }, 1000);
+            }, index * 2000);
+
+        });
+
+    }
+
+    const flipPlayerCards = (playerCards: string[]) => {
+
+        playerCards.forEach((card: string, index) => {
+            setTimeout(() => {
+                setPlayerHand((prevCards) => [
+                    ...prevCards, 
+                    {card, flipped: false},
+                ]);
+
+                setTimeout(() => {
+                    setPlayerHand((prevCards) => 
                     prevCards.map((c, i) => (i === index) ? {...c, flipped: true} : c))
                 }, 1000);
             }, index * 2000);
@@ -138,29 +149,35 @@ export default function GamePage() {
                     <div id="player-cards" className="relative flex justify-center items-center mb-6 border-4 border-grey rounded-md" 
                     style={{ height: '140px', width: '200px' }}>
                         
-                            {isDealt ? 
-                            playerHand.map((cardImage, index) => 
-                                <div key={index} id="card-border" className="absolute w-[90px] h-[113px]" 
-                                 style={{
+                        {isDealt && 
+                            playerHand.map((cardObj, index) =>
+                                <div key={index} id="card-border" className="absolute w-[90px] h-[113px]"   
+                                     style={{
                                     top: `${index * 0}px`,
                                     left: `${index * 30}px`
-                                }}  >
-                                <Image
-                                alt={`player-card-${index}`}
-                                src={cardImage}
-                                width={80}
-                                height={113}
-                                className="object-cover cards mt-2"
-                               />
-                        </div>
-                            ) : 
-                            (
-                                playerHand.map((_, index) => 
-                                    <div key={index} id="card-border" className="absolute w-[90px] h-[120px]" />
-                                )
-                            )
-                            
-                         }
+                                }}>
+                                {
+                                    cardObj.flipped ? (
+                                    <Image
+                                    alt={`dealer-card-${index}`}
+                                    src={cardObj.card}
+                                    width={80}
+                                    height={113}
+                                    className="object-cover cards mt-2"
+                                   /> 
+                                    ): (
+                                        <Image
+                                        alt= "back-side-card"
+                                        src="/cards/card-back2.png"
+                                        width={80}
+                                        height={113}
+                                        className="object-cover player-animate cards mt-2"
+                                       /> 
+                                    )
+                                }
+                                </div>
+                            )                            
+                            }
 
                     </div>
 
