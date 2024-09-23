@@ -11,24 +11,32 @@ type Card = {
 export default function GamePage() {
 
     const [isDealt, setIsDealt] = useState(false);
+    const [playButtonText, setPlayButtonText] = useState("START")
     const [dealerHand, setDealerHand] = useState<Card[]>([]);
     const [playerHand, setPlayerHand] = useState<Card[]>([]);
-    const [dealerAnimate, setDealerAnimate] = useState(false);
-    const [playerAnimate, setPlayerAnimate] = useState(false);
-
     const game = new Game("Sam");
-
-
-
+    
     const startGame = async() => {
-        game.startGame();
-        const {dealerCards, playerCards} = await game.showCardsImage();
-        console.log({dealerCards, playerCards})
 
-        flipDealerCards(dealerCards);
-        flipPlayerCards(playerCards);
+        if(!isDealt) {
+            game.startGame();
+            const {dealerCards, playerCards} = await game.showCardsImage();
+            console.log({dealerCards, playerCards})
+    
+            flipDealerCards(dealerCards);
+            flipPlayerCards(playerCards);
 
-        setIsDealt(true);
+            setIsDealt(true);
+            setPlayButtonText("RESET");
+        } else {
+            setIsDealt(false);
+            setPlayButtonText("START");
+            setDealerHand([]);
+            setPlayerHand([]);
+        }
+
+
+        // isDealt ? (setIsDealt(false), setPlayButtonText("START") ): (setIsDealt(true), setPlayButtonText("RESET"));
     }
 
     const flipDealerCards = (dealerCards: string[]) => {
@@ -183,10 +191,10 @@ export default function GamePage() {
 
                     <div className="relative w-full flex justify-center mb-8">
                         <button type="button"
-                            className="inset-y-0 px-5 py-3 m-8 bg-red-900 text-white rounded"
-                            onClick={startGame}> Start</button>
-                        <button type="button" className="inset-y-0 px-6 py-3 m-8 bg-red-900 text-white rounded"> Hit</button>
-                        <button type="button" className="inset-y-0 px-5 py-3 m-8 bg-red-900 text-white rounded"> Stand</button>
+                            className="inset-y-0 px-5 py-3 m-8 bg-red-900 text-white rounded hover:scale-110"
+                            onClick={startGame}> { playButtonText }</button>
+                        <button type="button" className="inset-y-0 px-6 py-3 m-8 bg-red-900 text-white rounded hover:scale-110"> Hit</button>
+                        <button type="button" className="inset-y-0 px-5 py-3 m-8 bg-red-900 text-white rounded hover:scale-110"> Stand</button>
                     </div>
 
                 </div>
