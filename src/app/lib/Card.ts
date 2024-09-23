@@ -1,5 +1,6 @@
 const suits: Set<string> = new Set(['Hearts', 'Diamonds', 'Clubs', 'Spades']);
 const ranks: Set<string> = new Set(['A','2','3','4','5','6','7','8','9','10','J','Q','K']);
+const cardBackImagePath: string = '/cards/card-back2.png';
 
 class Card{
     readonly suit : string;
@@ -26,7 +27,8 @@ export {
     Card,
     suitsArray as suits,
     ranksArray as ranks,
-    getCardImagePath
+    getCardImagePath,
+    cardBackImagePath
  };
 
  export type { CardType };
