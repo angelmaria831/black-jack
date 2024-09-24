@@ -1,12 +1,14 @@
 import Player from "@/app/lib/Player";
 import { Card } from "@/app/lib/Card";
 
-describe('Player', () => {
+describe('Player & Dealer', () => {
 
     let player: Player;
+    let dealer: Player;
 
     beforeEach(() => {
         player = new Player('John');
+        dealer = new Player('Dealer');
     })
 
     it('should initialize Player with name and empty hand', () => {
@@ -53,6 +55,24 @@ describe('Player', () => {
         const totalScore = player.totalScore();
         expect(totalScore).toBe(18);
 
+    })
+
+    it('should not consider rank value of first card for dealer if dealerCard is hidden', () => {
+        const initialCards = [new Card('Diamonds', '8'), new Card('Spades', '10')];
+        dealer.receiveCards(initialCards);
+
+        const isDealerCardHidden = true;
+        const totalScore = dealer.totalScore(isDealerCardHidden);
+        expect(totalScore).toBe(10);
+    })
+
+    it('should calculate dealer score with all card"s rank if dealerCard is not hidden', () => {
+        const initialCards = [new Card('Diamonds', '8'), new Card('Spades', '10')];
+        dealer.receiveCards(initialCards);
+
+        const isDealerCardHidden = false;
+        const totalScore = dealer.totalScore(isDealerCardHidden);
+        expect(totalScore).toBe(18);
     })
 
     it('should consider Ace card as 11 when totalScore is less than ir equal to 21', () => {
