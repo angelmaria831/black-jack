@@ -18,12 +18,18 @@ class Player {
         return this.hand;
     }
 
-    totalScore() {
+    totalScore(isDealerCardHidden: boolean = false) {
 
         let total: number  = 0;
         let containsAce: boolean = false;
+        let firstCard: boolean = true;
 
         for (const { rank } of this.hand) {
+
+            if(isDealerCardHidden && firstCard){
+                firstCard = false;
+                continue;
+            }
 
             if(rank === 'A' && mapRankValues.has(rank)) {
                 total += mapRankValues.get(rank)!;
@@ -33,6 +39,8 @@ class Player {
             } else {
                 total += parseInt(rank);
             }
+
+            firstCard = false;
         }
 
         if(containsAce && total > 21) total -= 10;
