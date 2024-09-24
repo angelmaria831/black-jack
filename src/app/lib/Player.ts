@@ -1,4 +1,4 @@
-import { CardType } from "./Card";
+import { CardType, mapRankValues } from "./Card";
 
 class Player {
 
@@ -25,11 +25,11 @@ class Player {
 
         for (const { rank } of this.hand) {
 
-            if(rank === 'A') {
-                total += 11;
+            if(rank === 'A' && mapRankValues.has(rank)) {
+                total += mapRankValues.get(rank)!;
                 containsAce = true;
-            } else if(['J', 'Q', 'K'].includes(rank)) {
-                total += 10;
+            } else if(mapRankValues.has(rank)) {
+                total += mapRankValues.get(rank)!;
             } else {
                 total += parseInt(rank);
             }
