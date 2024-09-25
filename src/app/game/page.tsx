@@ -3,6 +3,7 @@ import Image from "next/image";
 import { use, useState } from "react";
 import Game from "../lib/Game";
 
+
 type Card = {
     card: string;
     flipped: boolean;
@@ -15,6 +16,9 @@ export default function GamePage() {
     const [dealerHand, setDealerHand] = useState<Card[]>([]);
     const [playerHand, setPlayerHand] = useState<Card[]>([]);
     const [dealerScore, setDealerScore] =useState(0);
+    const [playerScore, setPlayerScore] =useState(0);
+    const cardFlipSound = '/sounds/card-sounds.mp3';
+    const audio = new Audio(cardFlipSound);
     const game = new Game("Sam");
 
     const startGame = async() => {
@@ -30,14 +34,21 @@ export default function GamePage() {
             setIsDealt(true);
             setPlayButtonText("RESET");
 
-            const { dealerScore, playerScore } = await game.getTotalScore();
-            setDealerScore(dealerScore);
+            setTotalScoreAndStatus();
 
         } else {
             setIsDealt(false);
             setPlayButtonText("START");
             setDealerHand([]);
             setPlayerHand([]);
+        }
+
+
+        async function setTotalScoreAndStatus() {
+
+            const { dealerScore, playerScore, isGameOver } = await game.getTotalScoreAndStatus();
+            setDealerScore(dealerScore);
+            setPlayerScore(playerScore);
         }
 
 
@@ -53,6 +64,7 @@ export default function GamePage() {
                 ]);
 
                 setTimeout(() => {
+                    audio.play();
                     setDealerHand((prevCards) => 
                     prevCards.map((c, i) => (i === index) ? {...c, flipped: true} : c))
                 }, 1000);
@@ -153,6 +165,7 @@ export default function GamePage() {
                    </div>
 
                     <h1 className="text-white text-4xl font-bold mb-4 mt-4">You</h1>
+                    <div className="relative flex items-center mb-4 ">
                     <div id="player-cards" className="relative flex justify-center items-center mb-6 border-4 border-grey rounded-md" 
                     style={{ height: '140px', width: '200px' }}>
                         
@@ -187,7 +200,8 @@ export default function GamePage() {
                             }
 
                     </div>
-
+                    {isDealt && <div id="tooltip-player" className="absolute right-[-115px] w-24 rounded bg-red-900 p-2 text-xs text-white"> POINTS : {playerScore}</div>}
+                    </div>
                     <div className="relative w-full flex justify-center mb-8">
                         <button type="button"
                             className="inset-y-0 px-5 py-3 m-8 bg-red-900 text-white rounded hover:scale-110"
