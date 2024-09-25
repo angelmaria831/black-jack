@@ -7,7 +7,7 @@ class Game {
     player: PlayerType;
     dealer: PlayerType;
     deck: DeckType | null;
-    isDealerCardHidden: Boolean;
+    isDealerCardHidden: boolean;
 
     constructor(playerName: string) {
         this.player = new Player(playerName.toLowerCase());
@@ -33,6 +33,13 @@ class Game {
             playerCards: this.player.hand.map(card => getCardImagePath(card))
         }
     } 
+
+    getTotalScore() {
+        return {
+            dealerScore: this.dealer.totalScore(this.isDealerCardHidden),
+            playerScore: this.player.totalScore()
+        }
+    }
 }
 
 export default Game;
