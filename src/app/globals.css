@@ -186,3 +186,48 @@ button{
   border-top: 6px solid transparent; 
   border-bottom: 6px solid transparent; 
 }
+
+
+@keyframes player-tooltip-slide {
+
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+
+  to{
+    opacity: 1;
+    transform: translateX(-10px);
+  }
+}
+
+/* Tooltip container */
+#tooltip-player {
+  position: absolute;
+  right: -115px; 
+  transform: translateY(-50%);
+  background-color: "red-900"; 
+  color: white;
+  padding: 8px 12px;
+  font-size: 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  animation: player-tooltip-slide 0.5s forwards;
+  animation-delay: 3s;
+  
+}
+
+/* Tooltip arrow using a pseudo-element */
+#tooltip-player::before {
+  content: '';
+  position: absolute;
+  top: 50%; 
+  left: -9px; 
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-right: 10px solid #810202; 
+  border-top: 6px solid transparent; 
+  border-bottom: 6px solid transparent; 
+}
