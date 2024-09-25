@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { use, useState } from "react";
 import Game from "../lib/Game";
 
 type Card = {
@@ -14,8 +14,9 @@ export default function GamePage() {
     const [playButtonText, setPlayButtonText] = useState("START")
     const [dealerHand, setDealerHand] = useState<Card[]>([]);
     const [playerHand, setPlayerHand] = useState<Card[]>([]);
+    const [dealerScore, setDealerScore] =useState(0);
     const game = new Game("Sam");
-    
+
     const startGame = async() => {
 
         if(!isDealt) {
@@ -28,6 +29,10 @@ export default function GamePage() {
 
             setIsDealt(true);
             setPlayButtonText("RESET");
+
+            const { dealerScore, playerScore } = await game.getTotalScore();
+            setDealerScore(dealerScore);
+
         } else {
             setIsDealt(false);
             setPlayButtonText("START");
@@ -36,7 +41,6 @@ export default function GamePage() {
         }
 
 
-        // isDealt ? (setIsDealt(false), setPlayButtonText("START") ): (setIsDealt(true), setPlayButtonText("RESET"));
     }
 
     const flipDealerCards = (dealerCards: string[]) => {
@@ -77,6 +81,8 @@ export default function GamePage() {
 
     }
 
+
+
     return (
         <div className="relative w-full h-screen bg-black">
             <nav className="fixed top-0 left-0 w-full py-6 px-6 bg-gradient-to-b from-black to-transparent z-10">
@@ -104,24 +110,14 @@ export default function GamePage() {
                             width={80}
                             height={120}
                             className="absolute cards-shuffled right-0 mr-40 object-contain" />
-                        {/* {isDealt && 
-                            dealerHand.map((cardImage, index) => 
-                                
-                                <Image
-                            alt="Shuffled Deck"
-                            src="/cards/card-back2.png"
-                            width={80}
-                            height={120}
-                            className="absolute card-animation cards-shuffled right-0 mr-40 object-contain" />
-                            )
-                        } */}
-
-
-                    </div>
-                    <div id="dealer-cards" className="relative flex justify-center items-center mb-4 border-4 border-grey rounded-md"
+                   </div>
+                   
+                   <div className="relative flex items-center mb-4 ">
+                   {isDealt && 
+                   <div id="tooltip-dealer" className="absolute left-[-115px] w-24 rounded bg-red-900 p-2 text-xs text-white"> POINTS : {dealerScore}</div>}
+                   <div id="dealer-cards" className="relative flex w-64 justify-center items-center mb-4 border-4 border-grey rounded-md"
                     style={{ height: '140px', width: '200px' }}>
- 
-                        
+                      
                             {isDealt && 
                             dealerHand.map((cardObj, index) =>
                                 <div key={index} id="card-border" className="absolute w-[90px] h-[113px]"   
@@ -153,6 +149,9 @@ export default function GamePage() {
                             }
 
                     </div>
+                    
+                   </div>
+
                     <h1 className="text-white text-4xl font-bold mb-4 mt-4">You</h1>
                     <div id="player-cards" className="relative flex justify-center items-center mb-6 border-4 border-grey rounded-md" 
                     style={{ height: '140px', width: '200px' }}>
