@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { use, useState } from "react";
+import { useRef, useState } from "react";
 import Game from "../lib/Game";
 
 
@@ -11,20 +11,22 @@ type Card = {
 
 export default function GamePage() {
 
+    const [game, setGame] = useState<Game>(new Game("Sam"));
     const [isDealt, setIsDealt] = useState(false);
     const [playButtonText, setPlayButtonText] = useState("START")
     const [dealerHand, setDealerHand] = useState<Card[]>([]);
     const [playerHand, setPlayerHand] = useState<Card[]>([]);
     const [dealerScore, setDealerScore] =useState(0);
     const [playerScore, setPlayerScore] =useState(0);
-    const cardFlipSound = '/sounds/card-sounds.mp3';
-    const audio = new Audio(cardFlipSound);
-    const game = new Game("Sam");
+    // const cardFlipSound = '/sounds/card-sounds.mp3';
+    // const audio = new Audio(cardFlipSound);
+    
 
     const startGame = async() => {
 
         if(!isDealt) {
             game.startGame();
+            console.log("starting...")
             const {dealerCards, playerCards} = await game.showCardsImage();
             console.log({dealerCards, playerCards})
     
@@ -37,6 +39,8 @@ export default function GamePage() {
             setTotalScoreAndStatus();
 
         } else {
+            const newGame = new Game("Sam");
+            setGame(newGame);
             setIsDealt(false);
             setPlayButtonText("START");
             setDealerHand([]);
@@ -46,27 +50,29 @@ export default function GamePage() {
 
         async function setTotalScoreAndStatus() {
 
-            const { dealerScore, playerScore, isGameOver } = await game.getTotalScoreAndStatus();
-            setDealerScore(dealerScore);
-            setPlayerScore(playerScore);
+            const scores = await game.getTotalScoreAndStatus();
+            console.log("sco ", scores)
+            setDealerScore((scores?.dealerScore) ?? 0);
+            setPlayerScore((scores?.playerScore) ?? 0);
         }
 
 
     }
 
-    const flipDealerCards = (dealerCards: string[]) => {
+    const flipDealerCards = (dealerCards: Card[]) => {
 
-        dealerCards.forEach((card: string, index) => {
+        dealerCards.forEach((cardObj, index) => {
+            console.log({cardObj})
             setTimeout(() => {
                 setDealerHand((prevCards) => [
                     ...prevCards, 
-                    {card, flipped: false},
+                    cardObj,
                 ]);
 
                 setTimeout(() => {
-                    audio.play();
+                    // audio.play();
                     setDealerHand((prevCards) => 
-                    prevCards.map((c, i) => (i === index) ? {...c, flipped: true} : c))
+                    prevCards.map((c, i) => ({...c, flipped: true})))
                 }, 1000);
             }, index * 2000);
 
@@ -74,18 +80,22 @@ export default function GamePage() {
 
     }
 
-    const flipPlayerCards = (playerCards: string[]) => {
+    const flipPlayerCards = (playerCards: Card[]) => {
+        console.log({playerCards})
+        playerCards.forEach((cardObj, index) => {
 
-        playerCards.forEach((card: string, index) => {
             setTimeout(() => {
+                console.log("1st")
                 setPlayerHand((prevCards) => [
                     ...prevCards, 
-                    {card, flipped: false},
+                    cardObj,
                 ]);
 
                 setTimeout(() => {
+                    // audio.play();
+                    console.log("2nd")
                     setPlayerHand((prevCards) => 
-                    prevCards.map((c, i) => (i === index) ? {...c, flipped: true} : c))
+                    prevCards.map((c, i) =>  ({...c, flipped: true})))
                 }, 1000);
             }, index * 2000);
 
@@ -93,6 +103,10 @@ export default function GamePage() {
 
     }
 
+    const hitWithCard = async() => {
+        const newCard = game.hitWithCard();
+        flipPlayerCards([newCard]);
+    }
 
 
     return (
@@ -144,7 +158,7 @@ export default function GamePage() {
                                     src={cardObj.card}
                                     width={80}
                                     height={113}
-                                    className="object-cover cards mt-2"
+                                    className="object-cover dealer-animate cards mt-2"
                                    /> 
                                     ): (
                                         <Image
@@ -152,7 +166,7 @@ export default function GamePage() {
                                         src="/cards/card-back2.png"
                                         width={80}
                                         height={113}
-                                        className="object-cover dealer-animate cards mt-2"
+                                        className="object-cover dealer-animate flip-card cards mt-2"
                                        /> 
                                     )
                                 }
@@ -179,7 +193,7 @@ export default function GamePage() {
                                 {
                                     cardObj.flipped ? (
                                     <Image
-                                    alt={`dealer-card-${index}`}
+                                    alt={`player-card-${index}`}
                                     src={cardObj.card}
                                     width={80}
                                     height={113}
@@ -206,7 +220,8 @@ export default function GamePage() {
                         <button type="button"
                             className="inset-y-0 px-5 py-3 m-8 bg-red-900 text-white rounded hover:scale-110"
                             onClick={startGame}> { playButtonText }</button>
-                        <button type="button" className="inset-y-0 px-6 py-3 m-8 bg-red-900 text-white rounded hover:scale-110"> Hit</button>
+                        <button type="button" className="inset-y-0 px-6 py-3 m-8 bg-red-900 text-white rounded hover:scale-110"
+                            onClick={hitWithCard}> Hit</button>
                         <button type="button" className="inset-y-0 px-5 py-3 m-8 bg-red-900 text-white rounded hover:scale-110"> Stand</button>
                     </div>
 
