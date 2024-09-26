@@ -8,14 +8,12 @@ class Game {
     dealer: PlayerType;
     deck: DeckType;
     isDealerCardHidden: boolean;
-    winner: string;
 
     constructor(playerName: string) {
         this.player = new Player(playerName.toLowerCase());
         this.dealer = new Player("dealer");
         this.deck = new Deck();
         this.isDealerCardHidden = true;
-        this.winner = '';
     }
 
 
@@ -43,23 +41,34 @@ class Game {
         const scores = {
             dealerScore: this.dealer.totalScore(this.isDealerCardHidden),
             playerScore: this.player.totalScore(),
-            isGameOver: false
+            isGameOver: false,
+            isPlayerWinner: false
         }
 
         if(scores.playerScore === 21 || scores.dealerScore > 21){
             scores.isGameOver = true;
-            this.winner = 'player';
+            scores.isPlayerWinner = true;
         }else if(scores.dealerScore === 21 || scores.playerScore > 21){
             scores.isGameOver = true;
-            this.winner = 'dealer';
         }
         return scores;
     }
 
     hitWithCard() {
+        
         const card = this.deck.draw(1)
         this.player.receiveCards(card);
         return {'card': getCardImagePath(card[0]), flipped: false}
+    }
+
+    stand() {
+        this.isDealerCardHidden = false;
+
+        return {
+            'hiddenCard': {'card': getCardImagePath(this.dealer.hand[0]),
+                flipped: true
+            }
+        }
     }
 }
 
