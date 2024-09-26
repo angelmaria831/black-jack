@@ -11,7 +11,7 @@ class Player {
     }
 
     receiveCards(cards: CardType[]) {
-
+        
         if(cards.length === 0) throw new Error("No cards were received");
         
         this.hand = [...this.hand, ...cards];

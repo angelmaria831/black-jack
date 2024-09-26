@@ -19,7 +19,7 @@ class  Deck {
             this.cards[i] = newIndexValue;
         }
 
-        return this.cards;
+        return this;
     }  
 
     draw(count: number): CardType[] | any{
