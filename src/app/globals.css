@@ -65,10 +65,6 @@ border-radius: 5px;
 
   100%{
     transform: translate(0, 0);
-    transform: rotateY(180deg);
-    transform-style: preserve-3d;
-    perspective: 1000px;
-    backface-visibility: hidden;
   }
 }
 
@@ -102,6 +98,9 @@ border-radius: 5px;
 
   100% {
     transform: rotateY(180deg);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    backface-visibility: hidden;
   }
 }
 
@@ -109,7 +108,7 @@ border-radius: 5px;
   transform: rotateY(180deg);
   transform-style: preserve-3d;
   perspective: 1000px;
-  animation: flip-card 0.6s ease forwards;
+  animation: flip-card 1.5s ease forwards;
   backface-visibility: hidden;
 }
 
