@@ -45,12 +45,19 @@ class Game {
             isPlayerWinner: false
         }
 
-        if(scores.playerScore === 21 || scores.dealerScore > 21){
+        if( scores.playerScore === 21 || 
+            scores.dealerScore > 21  || 
+            (scores.playerScore > scores.dealerScore && !this.isDealerCardHidden)){
+
             scores.isGameOver = true;
             scores.isPlayerWinner = true;
-        }else if(scores.dealerScore === 21 || scores.playerScore > 21){
+
+        }else if(scores.dealerScore === 21 || 
+            scores.playerScore > 21 || 
+            (scores.playerScore < scores.dealerScore && !this.isDealerCardHidden)){
             scores.isGameOver = true;
         }
+        
         return scores;
     }
 
@@ -63,11 +70,21 @@ class Game {
 
     stand() {
         this.isDealerCardHidden = false;
+        const newCards = []
+
+        while(this.dealer.totalScore() <= this.player.totalScore()){
+            const card = this.deck.draw(1);
+            this.dealer.receiveCards(card);
+            newCards.push({
+                'card': getCardImagePath(card[0]),
+                flipped: false
+            });
+        }
 
         return {
             'hiddenCard': {'card': getCardImagePath(this.dealer.hand[0]),
-                flipped: true
-            }
+                            flipped: true},
+            'newCards': newCards
         }
     }
 }
