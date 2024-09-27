@@ -18,9 +18,11 @@ export default function GamePage() {
     const [playerHand, setPlayerHand] = useState<Card[]>([]);
     const [dealerScore, setDealerScore] =useState(0);
     const [playerScore, setPlayerScore] =useState(0);
-    // const cardFlipSound = '/sounds/card-sounds.mp3';
-    // const audio = new Audio(cardFlipSound);
-    
+    const [standGame, setStandGame] = useState(false);
+    const [isGameOver, setIsGameOver] = useState(false);
+    const [gameResult, setGameResult] = useState('');
+    const cardFlipSound = '/sounds/card-sounds.mp3';
+        
 
     const startGame = async() => {
 
@@ -45,22 +47,26 @@ export default function GamePage() {
             setPlayButtonText("START");
             setDealerHand([]);
             setPlayerHand([]);
+            setStandGame(false);
+            setIsGameOver(false);
+            setGameResult('');
         }
-
-
-        async function setTotalScoreAndStatus() {
-
-            const scores = await game.getTotalScoreAndStatus();
-            console.log("sco ", scores)
-            setDealerScore((scores?.dealerScore) ?? 0);
-            setPlayerScore((scores?.playerScore) ?? 0);
-        }
-
 
     }
 
-    const flipDealerCards = (dealerCards: Card[]) => {
+    const setTotalScoreAndStatus = async() => {
 
+        const scores = await game.getTotalScoreAndStatus();
+        setDealerScore((scores?.dealerScore) ?? 0);
+        setPlayerScore((scores?.playerScore) ?? 0);
+        if(scores?.isGameOver){
+            setIsGameOver(true);
+            scores.isPlayerWinner ? setGameResult('YOU WON!!') : setGameResult('BUST! Try Next Time.');
+        }
+    }
+
+    const flipDealerCards = (dealerCards: Card[]) => {
+        const audio = new Audio(cardFlipSound);
         dealerCards.forEach((cardObj, index) => {
             console.log({cardObj})
             setTimeout(() => {
@@ -70,7 +76,7 @@ export default function GamePage() {
                 ]);
 
                 setTimeout(() => {
-                    // audio.play();
+                    audio.play();
                     setDealerHand((prevCards) => 
                     prevCards.map((c, i) => ({...c, flipped: true})))
                 }, 1000);
@@ -82,6 +88,7 @@ export default function GamePage() {
 
     const flipPlayerCards = (playerCards: Card[]) => {
         console.log({playerCards})
+        const audio = new Audio(cardFlipSound);
         playerCards.forEach((cardObj, index) => {
 
             setTimeout(() => {
@@ -92,7 +99,7 @@ export default function GamePage() {
                 ]);
 
                 setTimeout(() => {
-                    // audio.play();
+                    audio.play();
                     console.log("2nd")
                     setPlayerHand((prevCards) => 
                     prevCards.map((c, i) =>  ({...c, flipped: true})))
@@ -106,8 +113,21 @@ export default function GamePage() {
     const hitWithCard = async() => {
         const newCard = game.hitWithCard();
         flipPlayerCards([newCard]);
+        setTotalScoreAndStatus();
     }
 
+    const stand = () => {
+        const { hiddenCard, newCards } = game.stand();
+        setStandGame(true);
+        const audio = new Audio(cardFlipSound);
+        audio.play();
+        setDealerHand((prevCards) => 
+        prevCards.map((card, index) => 
+            index === 0 ? hiddenCard : card
+        ));
+        flipDealerCards(newCards);
+        setTotalScoreAndStatus();
+    }
 
     return (
         <div className="relative w-full h-screen bg-black">
@@ -126,6 +146,9 @@ export default function GamePage() {
                     fill
                     style={{ objectFit: "cover" }} />
 
+{/* <h1>You Win!</h1>
+        <iframe src="https://giphy.com/embed/QZIfolV1CfKlatGYmz" width="480" height="270" frameBorder="0" allowFullScreen></iframe> */}
+
                 <div className="relative flex flex-col items-center justify-center h-full mt-7">
 
                     <div className="relative w-full flex justify-center items-center mt-14">
@@ -142,7 +165,7 @@ export default function GamePage() {
                    {isDealt && 
                    <div id="tooltip-dealer" className="absolute left-[-115px] w-24 rounded bg-red-900 p-2 text-xs text-white"> POINTS : {dealerScore}</div>}
                    <div id="dealer-cards" className="relative flex w-64 justify-center items-center mb-4 border-4 border-grey rounded-md"
-                    style={{ height: '140px', width: '200px' }}>
+                    style={{ height: '140px', width: '250px' }}>
                       
                             {isDealt && 
                             dealerHand.map((cardObj, index) =>
@@ -152,7 +175,16 @@ export default function GamePage() {
                                     left: `${index * 30}px`
                                 }}>
                                 {
-                                    cardObj.flipped ? (
+                                    (index === 0 && standGame) ? (
+                                        <Image
+                                    alt={`dealer-card-${index}`}
+                                    src={cardObj.card}
+                                    width={80}
+                                    height={113}
+                                    className="object-cover dealer-animate cards mt-2"
+                                   /> 
+                            ):
+                                    (cardObj.flipped ? (
                                     <Image
                                     alt={`dealer-card-${index}`}
                                     src={cardObj.card}
@@ -168,7 +200,7 @@ export default function GamePage() {
                                         height={113}
                                         className="object-cover dealer-animate flip-card cards mt-2"
                                        /> 
-                                    )
+                                    ))
                                 }
                                 </div>
                             )                            
@@ -178,10 +210,14 @@ export default function GamePage() {
                     
                    </div>
 
+                        {
+                            isGameOver && 
+                            <h1 className="text-yellow text-4xl font-bold">{gameResult}</h1>
+                        }
                     <h1 className="text-white text-4xl font-bold mb-4 mt-4">You</h1>
                     <div className="relative flex items-center mb-4 ">
                     <div id="player-cards" className="relative flex justify-center items-center mb-6 border-4 border-grey rounded-md" 
-                    style={{ height: '140px', width: '200px' }}>
+                    style={{ height: '140px', width: '250px' }}>
                         
                         {isDealt && 
                             playerHand.map((cardObj, index) =>
@@ -216,13 +252,16 @@ export default function GamePage() {
                     </div>
                     {isDealt && <div id="tooltip-player" className="absolute right-[-115px] w-24 rounded bg-red-900 p-2 text-xs text-white"> POINTS : {playerScore}</div>}
                     </div>
+
+                    {/* <h1>{result}</h1> */}
                     <div className="relative w-full flex justify-center mb-8">
                         <button type="button"
                             className="inset-y-0 px-5 py-3 m-8 bg-red-900 text-white rounded hover:scale-110"
                             onClick={startGame}> { playButtonText }</button>
                         <button type="button" className="inset-y-0 px-6 py-3 m-8 bg-red-900 text-white rounded hover:scale-110"
-                            onClick={hitWithCard}> Hit</button>
-                        <button type="button" className="inset-y-0 px-5 py-3 m-8 bg-red-900 text-white rounded hover:scale-110"> Stand</button>
+                            onClick={hitWithCard}> HIT</button>
+                        <button type="button" className="inset-y-0 px-5 py-3 m-8 bg-red-900 text-white rounded hover:scale-110" 
+                        onClick={stand}>STAND</button>
                     </div>
 
                 </div>
