@@ -44,7 +44,6 @@ export default function PlayerCards ({isDealt, playerHand, playerScore}: PlayerC
                     </div>
                 )                            
                 }
-
         </div>
         {isDealt && <div id="tooltip-player" className="absolute right-[-115px] w-24 rounded bg-red-900 p-2 text-xs text-white"> POINTS : {playerScore}</div>}
         </div>

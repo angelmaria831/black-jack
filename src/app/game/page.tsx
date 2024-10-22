@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Game from "../lib/Game";
 
 import { Card } from "../types/Card";
@@ -25,10 +25,7 @@ export default function GamePage() {
   const startGame = async () => {
     if (!isDealt) {
       game.startGame();
-      console.log("starting...");
       const { dealerCards, playerCards } = await game.showCardsImage();
-      console.log({ dealerCards, playerCards });
-
       flipDealerCards(dealerCards);
       flipPlayerCards(playerCards);
 
@@ -64,7 +61,6 @@ export default function GamePage() {
   const flipDealerCards = (dealerCards: Card[]) => {
     const audio = new Audio(cardFlipSound);
     dealerCards.forEach((cardObj, index) => {
-      console.log({ cardObj });
       setTimeout(() => {
         setDealerHand((prevCards) => [...prevCards, cardObj]);
 
@@ -79,16 +75,13 @@ export default function GamePage() {
   };
 
   const flipPlayerCards = (playerCards: Card[]) => {
-    console.log({ playerCards });
     const audio = new Audio(cardFlipSound);
     playerCards.forEach((cardObj, index) => {
       setTimeout(() => {
-        console.log("1st");
         setPlayerHand((prevCards) => [...prevCards, cardObj]);
 
         setTimeout(() => {
           audio.play();
-          console.log("2nd");
           setPlayerHand((prevCards) =>
             prevCards.map((c, i) => ({ ...c, flipped: true }))
           );
@@ -117,15 +110,6 @@ export default function GamePage() {
 
   return (
     <div className="relative w-full h-screen bg-black">
-      {/* <nav className="fixed top-0 left-0 w-full py-6 px-6 bg-gradient-to-b from-black to-transparent z-10">
-                <div className="flex justify-between items-center max-w-7xl mx-auto">
-                    <h1 className="text-3xl font-bold text-white cursor-pointer hover:text-red-400 hover:font-bold transition duration-300" >
-                        <span>BlackJack</span></h1>
-                    <span className="text-white text-xl cursor-pointer hover:text-red-400 hover:font-bold transition duration-300"
-                    >Rules</span>
-                </div>
-            </nav> */}
-
       <main className="relative w-full h-screen top-0 overflow-hidden bg-gradient-to-l from-tranparent to-black">
         <Image
           src="/table_background.png"
